@@ -8,18 +8,6 @@ module.exports = (function(){
 			var params = helper.paramsForUrl(url);
 			return params
 		},
-		createInstance: function() {
-			return Flickr = {
-				'request': require('flickrapi'),
-				'options': {
-          api_key: process.env.FLICKR_API_KEY,
-          secret: process.env.FLICKR_SECRET
-        }
-      }
-    },
-   requestData: function (err, data) {
-     flickrRequestDef.resolve(data.photos.photo);
-   },
    imagesForImage: function(image) {
       return images = {
         "thumb": 'https://farm'+image.farm+'.staticflickr.com/'+image.server+'/'+image.id+'_'+image.secret+'_t.jpg',
@@ -50,12 +38,26 @@ module.exports = (function(){
 
       return granuals;
    },
+   requestData: function (err, data) {
+      console.log(data)
+     flickrRequestDef.resolve(data.photos.photo);
+   },
+		createInstance: function() {
+			return Flickr = {
+				'request': require('flickrapi'),
+				'options': {
+          api_key: process.env.FLICKR_API_KEY,
+          secret: process.env.FLICKR_SECRET
+        }
+      }
+    },
     search: function (url) {
      var params = this.collectParams(url);
      var Flickr = this.createInstance();
 
      Flickr.request.tokenOnly(Flickr.options, 
                               function(err, flickr) {
+                                console.log(flickr);
       flickr.photos.search({ 
         'max_taken_date': params.time,
         'sort': 'date-taken-desc',
