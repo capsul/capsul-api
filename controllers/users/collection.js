@@ -7,10 +7,9 @@ module.exports = (function(){
 		var TwitterManager = require('../media/twitter');
 		var twitterGranuals = yield TwitterManager.search(this.request.url)
 
-		// Instagram Requests
 		var InstagramManager = require('../media/instagram');
 		var instagramGranuals = yield InstagramManager.search(this.request.url)
-
+    
 		// Flickr Requests
 		// var FlickrManager = require('../media/flickr');
 		// var flickrGranuals = yield FlickrManager.search(this.request.url);
@@ -24,10 +23,8 @@ module.exports = (function(){
       "data": []
     }
 
-    // Joining all source granuals
     capsul.data.push(instagramGranuals);
     capsul.data.push(twitterGranuals);
-    // capsul.data.push(flickrGranuals);
 
 		this.body = yield capsul;
 	}
