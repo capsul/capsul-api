@@ -25,6 +25,8 @@ module.exports = (function(){
 
     capsul.data.push(instagramGranuals);
     capsul.data.push(twitterGranuals);
+    delete instagramGranuals;
+    delete twitterGranuals;
 
 		this.body = yield capsul;
 	}
