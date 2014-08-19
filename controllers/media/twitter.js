@@ -5,7 +5,7 @@ var twitterRequestDef = require('q').defer();
 function collectParams(url) {
 		var helper = require("../../helpers");
 		var params = helper.paramsForUrl(url);
-		params.time = helper.unixToDate(params.time);
+		params.time = helper.unixToDate(params.time + '000');
 		return params
 	}
 
@@ -79,7 +79,7 @@ function collectParams(url) {
 				'count': 100,
 				'include_entities': true }, 
 				requestData)
-
+			console.log(params);
 			return twitterRequestDef.promise
 			.then(granualsFromTwitterData);
 		}
