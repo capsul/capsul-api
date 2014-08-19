@@ -10,7 +10,7 @@ module.exports = (function(){
 			'lat=' + params.lat +
 			'&lng=' + params.lng +
 			'&max_timestamp='+ params.time +
-			'&distance=' + '500' +
+			'&distance=' + '200' +
 			'&access_token=' + 
 			process.env.INSTAGRAM_ACCESS_TOKEN,
 			headers: { 'User-Agent': 'request' }
@@ -62,11 +62,21 @@ module.exports = (function(){
 
 	return InstagramManager = {
 		search: function *(url) {
-			var params = collectParamsFromUrl(url)
+			var params = collectParamsFromUrl(url);
 			var options = collectOptions(params);
+
 			var response = yield require('koa-request')(options);
+			var response2 = yield require('koa-request')(options);
+			var response3 = yield require('koa-request')(options);
+
 			var instagramData = JSON.parse(response.body).data
-			return granualsFromInstagramData(instagramData)
+			var instagramData2 = JSON.parse(response2.body).data
+			var instagramData3 = JSON.parse(response3.body).data
+			var combinedResponse = instagramData.concat(instagramData2)
+															.concat(instagramData3)
+
+
+			return granualsFromInstagramData(combinedResponse);
 		}
 	}
-})();
+})();	
