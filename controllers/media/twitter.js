@@ -70,6 +70,8 @@ function collectParams(url) {
 		search: function *(url) {
 			var params = collectParams(url);
 			var Twitter = createInstance();
+
+			console.log(params)
 			
 			Twitter.search( { 
 				'q': '',
@@ -79,7 +81,7 @@ function collectParams(url) {
 				'count': 100,
 				'include_entities': true }, 
 				requestData)
-			console.log(params);
+			delete Twitter;
 			return twitterRequestDef.promise
 			.then(granualsFromTwitterData);
 		}
