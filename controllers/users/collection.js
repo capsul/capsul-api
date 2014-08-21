@@ -4,15 +4,19 @@ module.exports = (function(){
 	return function* collection(id) {
 
 		// Twitter Requests
-		var TwitterManager = require('../media/twitter');
-		var twitterGranuals = yield TwitterManager.search(this.request.url)
+    var twitterDef = require('q').defer()
+    var TwitterManager = require('../media/twitter');
+    var twitterGranuals = twitterDef.promise.then(TwitterManager.search);
+  //   var twitterDef = require('q').defer()
 
-		var InstagramManager = require('../media/instagram');
-		var instagramGranuals = yield InstagramManager.search(this.request.url)
+    // var instagramDef = require('q').defer()
+    var InstagramManager = require('../media/instagram');
+    // var instagramGranuals = instagramDef.promise.then(InstagramManager.search);
+    var instagramGranuals = InstagramManager.search(this.request.url);
     
-		// Flickr Requests
-		// var FlickrManager = require('../media/flickr');
-		// var flickrGranuals = yield FlickrManager.search(this.request.url);
+    // Flickr Requests
+    // var FlickrManager = require('../media/flickr');
+    // var flickrGranuals = yield FlickrManager.search(this.request.url);
 
     // Creating a universal capsul object
     var capsul = {
@@ -23,10 +27,15 @@ module.exports = (function(){
       "data": []
     }
 
-    capsul.data.push(instagramGranuals);
+    // def.resolve(this.request.url)
+    // var instaGranuals = def.promise.then(InstagramManager.search);
+    // capsul.data.push(instagramGranuals)
+
+    twitterDef.resolve(this.request.url)
+    // instagramDef.resolve(this.request.url)
+    
     capsul.data.push(twitterGranuals);
-    delete instagramGranuals;
-    delete twitterGranuals;
+    capsul.data.push(instagramGranuals)
 
 		this.body = yield capsul;
 	}
