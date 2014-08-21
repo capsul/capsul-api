@@ -9,32 +9,31 @@ module.exports = (function(){
     // Twitter Requests
     var twitterDef = Q.defer();
     var twitterGranuals = twitterDef.promise
-                          .then(TwitterManager.search);
-    
+                          .then(TwitterManager.search)
+    twitterDef.resolve(this.request.url)
+                          
     // Instagram Requests
     var instagramDef = Q.defer();
     var instagramGranuals = instagramDef.promise
-                            .then(InstagramManager.search);
-
+                            .then(InstagramManager.search)
+    instagramDef.resolve(this.request.url)
+  
     // Flickr Requests
     // var FlickrManager = require('../media/flickr');
     // var flickrGranuals = yield FlickrManager.search(this.request.url);
 
     // Creating a universal capsul object
     var capsul = {
-      "user_id": id,
-      "latitude": require('../../helpers').paramsForUrl(this.request.url).lat,
-      "longitude": require('../../helpers').paramsForUrl(this.request.url).lng, 
-      "timestamp": require('../../helpers').paramsForUrl(this.request.url).time,
-      "data": []
+      user_id: id,
+      latitude: require('../../helpers').paramsForUrl(this.request.url).lat,
+      longitude: require('../../helpers').paramsForUrl(this.request.url).lng, 
+      timestamp: require('../../helpers').paramsForUrl(this.request.url).time,
+      data: []
     }
 
-    twitterDef.resolve(this.request.url)
-    instagramDef.resolve(this.request.url)
-
-    capsul.data.push(twitterGranuals);
     capsul.data.push(instagramGranuals);
-
-		this.body = yield capsul;
-	}
+    capsul.data.push(twitterGranuals);
+    
+    this.body = yield capsul;
+  }
 })();
