@@ -1,89 +1,36 @@
 module.exports = (function(){
 	
-var twitterRequestDef = require('q').defer();
-
-function collectParams(url) {
+	function collectParams(url) {
 		var helper = require("../../helpers");
 		var params = helper.paramsForUrl(url);
-		params.time = helper.unixToDate(params.time + '000');
 		return params
 	}
 
-	function createInstance(searchInfo) {
-		var Twitter = require('node-twitter');
-		return new Twitter.SearchClient( 
-			process.env.CONSUMER_KEY, 
-			process.env.CONSUMER_SECRET, 
-			process.env.ACCESS_TOKEN_KEY, 
-			process.env.ACCESS_TOKEN_SECRET 
-		);
+	function constructUrl(params) {
+	  url = "http://twitter-capsul.herokuapp.com/tweets?";
+	  url += "lat" + "=" + params["lat"] + "&";
+	  url += "lng" + "=" + params["lng"] + "&";
+	  url += "time" + "=" + params["time"];
+	  return url;
 	}
 
-	function locationForTweet(tweet) {
-		try {
-			return {
-				"lat": tweet.geo.coordinates.shift(),
-				"lon": tweet.geo.coordinates.shift()
-			}
-		} catch(e) {
-			return {
-				"lat": "", // TODO: Make current search coords
-				"lon": ""  // TODO: Make current search coords
-			}
-		}
+	function responseToJson(responseString) {
+		return JSON.parse(responseString).tweets
 	}
 
-	function hashtagsForTweet(tweet) {
-		try {
-			return tweet.entities.hashtags.map(function(hashtag) {
-				return hashtag.text;
-			});
-		} catch(e) {
-			return [];
-		}
-	}
-
-	function granualFromTweet(tweet) {
-		return granual = {
-			type: 				"text",
-			created_at: 	tweet.created_at,
-			source: 			"twitter",
-			language: 		tweet.lang,
-			content: 			tweet.text,
-			author:     	tweet.user.screen_name,
-			location:   	locationForTweet(tweet),
-			hashtags:   	hashtagsForTweet(tweet)
-		}
-	}
-
-	function granualsFromTwitterData(twitterData) {
-		return twitterData.map(function(tweet) {
-			return granualFromTweet(tweet);
-		});
-	}
-
-	function requestData(err, data) {
-		twitterRequestDef.resolve(data.statuses);
+	function convertBuffer(buffer) {
+		return buffer.toString('utf8')
 	}
 
 	return TwitterManager = {
-		search: function *(url) {
+		search: function (url) {
+			var qHTTP = require("q-io/http");
 			var params = collectParams(url);
-			var Twitter = createInstance();
-
-			console.log(params)
+			var url = constructUrl(params);
 			
-			Twitter.search( { 
-				'q': '',
-				'geocode': params.lat + "," + params.lng + "," + "1mi", 
-				'since_id': params.time,
-				'result_type': 'recent',
-				'count': 100,
-				'include_entities': true }, 
-				requestData)
-			delete Twitter;
-			return twitterRequestDef.promise
-			.then(granualsFromTwitterData);
+			return qHTTP.read(url)
+			.then(convertBuffer, console.error)
+			.then(responseToJson, console.error)
 		}
 	};
 })();
