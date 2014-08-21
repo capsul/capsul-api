@@ -1,9 +1,7 @@
 module.exports = (function(){
 	
 	function collectParams(url) {
-		var helper = require("../../helpers");
-		var params = helper.paramsForUrl(url);
-		return params
+		return require("../../helpers").paramsForUrl(url);
 	}
 
 	function constructUrl(params) {
@@ -14,23 +12,18 @@ module.exports = (function(){
 	  return url;
 	}
 
-	function responseToJson(responseString) {
-		return JSON.parse(responseString).tweets
-	}
-
-	function convertBuffer(buffer) {
-		return buffer.toString('utf8')
+	function tweetResponse(res) {
+		return JSON.parse(res.toString('utf8')).tweets
 	}
 
 	return TwitterManager = {
 		search: function (url) {
 			var qHTTP = require("q-io/http");
 			var params = collectParams(url);
-			var url = constructUrl(params);
+			var constructedUrl = constructUrl(params);
 			
-			return qHTTP.read(url)
-			.then(convertBuffer, console.error)
-			.then(responseToJson, console.error)
+			return qHTTP.read(constructedUrl)
+			.then(tweetResponse, console.error)
 		}
 	};
 })();
