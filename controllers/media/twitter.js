@@ -18,12 +18,9 @@ module.exports = (function(){
 
 	return TwitterManager = {
 		search: function (url) {
-			var qHTTP = require("q-io/http");
 			var params = collectParams(url);
 			var constructedUrl = constructUrl(params);
-			
-			return qHTTP.read(constructedUrl)
-			.then(tweetResponse, console.error)
+			return constructedUrl;
 		}
 	};
 })();
