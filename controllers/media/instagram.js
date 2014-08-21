@@ -1,5 +1,4 @@
 module.exports = (function(){
-
   function collectParams(url) {
     return require("../../helpers").paramsForUrl(url);
   }
@@ -31,12 +30,9 @@ module.exports = (function(){
 
   return InstagramManager = {
     search: function (url) {
-      var qHTTP = require("q-io/http");
       var params = collectParams(url);
       var requestUrl = constructUrl(params);
-
-      return qHTTP.read(requestUrl)
-      .then(mediaResponse, console.error)
+      return requestUrl;
     }
   };
 })();	
