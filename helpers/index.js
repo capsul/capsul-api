@@ -1,4 +1,7 @@
 module.exports = {
-	paramsForUrl: require('./paramsForUrl'),
-	unixToDate: require('./unixToDate')
+	urlParams: require('./urlParams'),
+	unixToDate: require('./unixToDate'),
+  dateToUnix: require('./dateToUnix'),
+  toJSON: require('./toJSON'),
+  valueToJSON: require('./valueToJSON')
 };

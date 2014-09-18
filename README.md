@@ -1,4 +1,4 @@
 capsul
 ======
 
-A sorting social media app based on geolocation and time 
+A social media search web application based on geolocation and time 

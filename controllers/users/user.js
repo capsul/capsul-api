@@ -1,7 +1,6 @@
 module.exports = (function(){
-	
 	// GET /users/:id
-	return function* user(id) {
-		this.body = yield {"users": "user"};
+	return function user(req, res) {
+		res.json({"users": "user"});
 	}
 })();

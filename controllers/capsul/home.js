@@ -1,5 +1,5 @@
 module.exports = (function() {
-	return function *home() {
-		this.body = yield {"capsul": "Unforget the forgotten."}
+	return function home(req, res) {
+		res.json({"capsul": "Unforget the forgotten."});
 	}
 })();

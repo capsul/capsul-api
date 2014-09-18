@@ -1,26 +1,16 @@
+var helpers = require('../../helpers')
+
+function constructTwitterCapsulRequest(params) {
+  var url = "http://twitter-capsul.herokuapp.com/tweets?";
+  url += "lat" + "=" + params["lat"] + "&"
+  url += "lng" + "=" + params["lng"] + "&"
+  url += "time" + "=" + params["time"]
+  return url
+}
+
 module.exports = (function(){
-	
-	function collectParams(url) {
-		return require("../../helpers").paramsForUrl(url);
+	return function (url) {
+		var params = helpers.urlParams(url)
+		return constructTwitterCapsulRequest(params)
 	}
-
-	function constructUrl(params) {
-	  url = "http://twitter-capsul.herokuapp.com/tweets?";
-	  url += "lat" + "=" + params["lat"] + "&";
-	  url += "lng" + "=" + params["lng"] + "&";
-	  url += "time" + "=" + params["time"];
-	  return url;
-	}
-
-	function tweetResponse(res) {
-		return JSON.parse(res.toString('utf8')).tweets
-	}
-
-	return TwitterManager = {
-		search: function (url) {
-			var params = collectParams(url);
-			var constructedUrl = constructUrl(params);
-			return constructedUrl;
-		}
-	};
-})();
+})()

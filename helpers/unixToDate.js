@@ -1,5 +1,4 @@
 module.exports = (function(){
-	
 	return function unixToDate(unixTime) {
 		console.log(unixTime)
 		var date = new Date(Number(unixTime));
