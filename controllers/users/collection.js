@@ -17,6 +17,14 @@ function convertTweetsTimeType(tweets) {
   })
 }
 
+function removeDuplicates(mediaList, attribute) {
+  var seen = {};
+  return mediaList.filter(function(mediaItem) {
+    var key = mediaItem[''+ attribute +''];
+    return seen[key] ? false : (seen[key] = true)
+  });
+}
+
 function stagger(media, tweets) {
   var staggered = [];
   media.forEach(function(image, index) {
@@ -76,6 +84,7 @@ module.exports = (function(){
       instagram: function(callback) {
         var endpoints = require('../media/instagram')(req.url);
         requestEndpoints(endpoints, function(err, instagramData) {
+          instagramData = removeDuplicates(instagramData, 'created_at');
           callback(null, instagramData)
         })
       },
