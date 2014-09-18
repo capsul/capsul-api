@@ -98,9 +98,7 @@ module.exports = (function(){
     function(err, data) {
       var tweets = chronological(convertTweetsTimeType(data.twitter));
       var media = chronological(data.instagram);
-      var staggeredGranuals = stagger(media, tweets);
-      capsul.data = staggeredGranuals;
-
+      capsul.data = tweets.length ? stagger(media, tweets) : media
       res.json(capsul);
     });
   }
