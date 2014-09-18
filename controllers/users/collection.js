@@ -87,7 +87,6 @@ module.exports = (function(){
       }
     }, 
     function(err, data) {
-      console.log(data);
       var tweets = chronological(convertTweetsTimeType(data.twitter));
       var media = chronological(data.instagram);
       var staggeredGranuals = stagger(media, tweets);
