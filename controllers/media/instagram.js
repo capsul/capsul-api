@@ -1,38 +1,33 @@
+var helpers = require('../../helpers')
+
+function constructUrl(params) {
+  var url = 'http://instagram-capsul.herokuapp.com/media?' 
+  url += 'lat=' + params.lat
+  url += '&lng=' + params.lng
+  url += '&time='+ params.time
+  url += '&access_token='
+  url += process.env.INSTAGRAM_ACCESS_TOKEN
+  return url
+}
+
+function spawnParamTimes(params) {
+  var offset = 8 * (60 * 60)
+
+  var pastParams = helpers.valueToJSON(params)
+  pastParams.time = (Number(params.time) + Number(offset)).toString()
+
+  var futureParams = helpers.valueToJSON(params)
+  futureParams.time = (Number(params.time) + Number(offset)).toString()
+
+  return [pastParams, params, futureParams]
+}
+
 module.exports = (function(){
-  function collectParams(url) {
-    return require("../../helpers").paramsForUrl(url);
+  return function (url) {
+    var params = helpers.urlParams(url)
+    return spawnParamTimes(params)
+    .map(function(paramSet) {
+      return constructUrl(paramSet)
+    })
   }
-
-  function constructUrl(params) {
-    return url = 'http://instagram-capsul.herokuapp.com/media?' + 
-      'lat=' + params.lat +
-      '&lng=' + params.lng +
-      '&time='+ params.time +
-      '&access_token=' + 
-      process.env.INSTAGRAM_ACCESS_TOKEN
-  }
-
-  function spawnParamTimes(params) {
-    var offset = 8 * (60 * 60)
-
-    var pastParams  = JSON.parse(JSON.stringify(params));
-    pastParams.time = (Number(params.time) + Number(offset)).toString();
-
-    var futureParams  = JSON.parse(JSON.stringify(params));
-    futureParams.time = (Number(params.time) + Number(offset)).toString();
-    console.log([pastParams, params, futureParams])
-    return [pastParams, params, futureParams];
-  }
-
-  function mediaResponse(res) {
-    return JSON.parse(res.toString('utf8')).media
-  }
-
-  return InstagramManager = {
-    search: function (url) {
-      var params = collectParams(url);
-      var requestUrl = constructUrl(params);
-      return requestUrl;
-    }
-  };
-})();	
+})()
