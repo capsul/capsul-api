@@ -1,32 +1,28 @@
-var compress 	= require('koa-compress'),
-		logger 		= require('koa-logger'),
-		serve 		= require('koa-static'),
-		route 		= require('koa-route'),
-		cors 			= require('koa-cors'),
-		koa 			= require('koa'),
-		dotenv    = require('dotenv'),
+var express   = require('express'),
 		path 			= require('path'),
-		util      = require('util'),
+		cors      = require('cors'),
+		dotenv    = require('dotenv'),
 		async     = require('async'),
 		request   = require('request'),
 		config    = require('./config'),
-		app 		  = koa();
+		app 		  = express();
 
 // Including CORS for cross-origin request access
 app.use(cors());
 
+// Setting application port
+app.set('port', config.server.port);
+
 // Load local environment variables
 dotenv.load();
 
-// Include Capsul Controllers
-var controllers = require('./controllers');
-
 // Include Capsul API Routes
-require('./routes')(app, route, controllers);
+require('./routes')(app);
 
 // Listen on local/heroku server port
 app.listen(config.server.port, function() {
-  console.log("Koa server listening on port " + 
-  config.server.port + 
-  "...");
+	var status = 
+	"Express server listening on port " + app.get('port') + 
+  " in " + process.env.NODE_ENV + " environment " + "...";
+  console.log(status);
 });
