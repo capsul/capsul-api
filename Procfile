@@ -1,1 +1,1 @@
-web: node --harmony --harmony_generators app.js
+web: node app.js
