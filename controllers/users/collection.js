@@ -36,28 +36,22 @@ function stagger(media, tweets) {
   return staggered.concat(tweets);
 }
 
-function requestEndpoints(endpoints, callback) {
-  async.parallel({
-    first: function(callback) {
-      request(endpoints[0], function(err, res, body) {
-        callback(null, helpers.toJSON(body).media);
-      });
-    },
-    second: function(callback) {
-      request(endpoints[1], function(err, res, body) {
-        callback(null, helpers.toJSON(body).media);
-      });
-    },
-    third: function(callback) {
-      request(endpoints[2], function(err, res, body) {
+function endpointsToRequests(endpoints) {
+  return endpoints.map(function(endpoint) {
+    return function(callback) {
+      request(endpoint, function(err, res, body) {
         callback(null, helpers.toJSON(body).media);
       });
     }
-  }, function(err, data) {
+  });
+}
+
+function requestEndpoints(endpoints, callback) {
+  endpoints = endpointsToRequests(endpoints)
+  async.parallel(endpoints, 
+  function(err, data) {
     if (err) { callback(err); return };
-    callback(err, 
-      data.first
-      .concat(data.second, data.third));
+    callback(err, _.flatten(data))
   })
 }
 
