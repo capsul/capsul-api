@@ -29,11 +29,9 @@ function stagger(media, tweets) {
   var staggered = [];
   media.forEach(function(image, index) {
     staggered.push(image);
-    if ((index % 2) === 1)
-      staggered.push(tweets.shift());
+    staggered.push(tweets.shift());
   });
-
-  return staggered.concat(tweets);
+  return staggered
 }
 
 function endpointsToRequests(endpoints) {
@@ -58,7 +56,8 @@ function requestEndpoints(endpoints, callback) {
 function requestEndpoint(endpoint, callback) {
   request(endpoint, function(err, res, body) {
     if (err) { callback(err); return };
-    callback(err, helpers.toJSON(body).tweets);
+    if (!body) callback(err, [])
+    else callback(err, helpers.toJSON(body).tweets);
   });
 }
 
