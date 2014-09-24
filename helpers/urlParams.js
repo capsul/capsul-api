@@ -1,14 +1,7 @@
-module.exports = (function(){
-	return function paramsForUrl(query){
-		 var paramInfo = {}
-		 var queryContainsParams = (query.indexOf("?") !== -1) ? true : false
-		if (queryContainsParams) {
-		  var paramList = query.split("?")[1].split("&")
-		  paramList.forEach(function(paramPair) {
-		    var keyValue = paramPair.split("=")
-		    paramInfo[keyValue.shift()] = keyValue.shift()
-		  })
-		}
-	  return paramInfo
-	}
-})()
+var qs = require('querystring')
+
+module.exports = function (query){
+	// Ex. Input: "/users/1/media?lat":"37.819877","lng":"-122.47894"
+	if (query.indexOf("?") === -1) { return {} }
+	return qs.parse(query.split("?")[1])
+}
