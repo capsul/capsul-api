@@ -1,16 +1,12 @@
-var helpers = require('../../helpers')
+var parseParams = require('../../helpers/parseParams')
 
-function constructTwitterCapsulRequest(params) {
-  var url = "http://twitter-capsul.herokuapp.com/tweets?";
-  url += "lat" + "=" + params["lat"] + "&"
-  url += "lng" + "=" + params["lng"] + "&"
-  url += "time" + "=" + params["time"]
-  return url
+function constructRequest(params) {
+  return 'http://twitter-capsul.herokuapp.com/tweets?' +
+    'lat' + '=' + params['lat'] + '&' +
+    'lng' + '=' + params['lng'] + '&' +
+    'time' + '=' + params['time']
 }
 
-module.exports = (function(){
-	return function (url) {
-		var params = helpers.urlParams(url)
-		return constructTwitterCapsulRequest(params)
-	}
-})()
+module.exports = function(url) {
+	return constructRequest(parseParams(url))
+}
