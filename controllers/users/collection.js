@@ -74,6 +74,12 @@ function requestEndpoint(endpoint, callback) {
 // GET /users/:id/media?lat=LAT&lng=LNG&time=TIME
 module.exports = function (req, res) {
   var params = parseParams(req.url);
+
+  if (!params.lat || !params.lng || !params.time) {
+    res.send({'error': 'Invalid request params'})
+    return
+  }
+
   var capsul = {
     user_id: req.params.id,
     latitude: params.lat,
