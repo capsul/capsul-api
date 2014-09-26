@@ -47,6 +47,7 @@ function endpointsToRequests(endpoints) {
   return endpoints.map(function(endpoint) {
     return function(callback) {
       request(endpoint, function(err, res, body) {
+        if (!body) { callback(null, []) }
         callback(null, parseImages(body))
       })
     }
