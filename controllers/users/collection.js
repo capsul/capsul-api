@@ -67,7 +67,13 @@ function requestEndpoint(endpoint, callback) {
   request(endpoint, function(err, res, body) {
     if (err) { callback(err); return };
     if (!body) callback(err, [])
-    else callback(err, parseTweets(body));
+    else {
+      try {
+        callback(err, parseTweets(body));
+      } catch(err) {
+        callback(err);
+      }
+    }
   })
 }
 
@@ -99,6 +105,7 @@ module.exports = function (req, res) {
     twitter: function(callback) {
       var endpoint = require('../media/twitter')(req.url)
       requestEndpoint(endpoint, function(err, twitterData) {
+        if (err) callback(null, [])
         callback(null, twitterData)
       });
     }
