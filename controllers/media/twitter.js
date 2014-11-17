@@ -2,7 +2,7 @@ var parseParams = require('../../helpers/parseParams')
 
 function constructRequest(params) {
 
-  return 'http://twitter-capsul-v2.herokuapp.com/tweets?' +
+  return 'http://twitter-capsul.herokuapp.com/tweets?' +
     'lat' + '=' + params['lat'] + '&' +
     'lng' + '=' + params['lng'] + '&' +
     'time' + '=' + params['time'] + '&' +

@@ -2,7 +2,7 @@ var parseParams = require('../../helpers/parseParams')
 
 function constructRequest(params) {
 
-  return 'http://instagram-capsul-v2.herokuapp.com/media?' +
+  return 'http://instagram-capsul.herokuapp.com/media?' +
     'lat' + '=' + params['lat'] + '&' +
     'lng' + '=' + params['lng'] + '&' +
     'time' + '=' + params['time'] + '&' +
