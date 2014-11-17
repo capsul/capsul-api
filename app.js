@@ -9,7 +9,9 @@ var express   = require('express'),
 
 // Including CORS for cross-origin request access
 app.use(cors())
-app.use(config.crossDomain)
+
+// Handle CORS preflight requests on all routes
+app.options('*', cors());
 
 // Setting application port
 app.set('port', config.server.port)

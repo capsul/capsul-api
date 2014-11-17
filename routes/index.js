@@ -4,8 +4,10 @@ var capsul = controller.capsul;
 var users = controller.users;
 
 module.exports = function(app) {
+
+
 	
-	// CapsulE
+	// Capsule
 	app.get('/', capsul.home);
 
 	// User Routes 
